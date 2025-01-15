@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "build": "netlify deploy --prod",
-    "deploy": "netlify deploy",
-    "init": "netlify init"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
@@ -16,10 +14,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "multer": "^1.4.5-lts.1",
-    "netlify-cli": "^18.0.1",
-    "netlify-lambda": "^2.0.16",
     "pst-extractor": "^1.10.0",
-    "serverless-http": "^3.2.0",
     "uuid": "^11.0.5"
   }
 }
