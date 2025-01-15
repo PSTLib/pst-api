@@ -94,6 +94,11 @@ const processFolder = (zip, outputDir, folder) => {
     }
 };
 
+
+router.get("/", (req, res) => {
+    res.send("App is running..");
+});
+
 router.post('/upload-pst', upload.single('pstFile'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');

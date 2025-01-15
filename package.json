@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "build": "netlify deploy --prod"
+    "build": "netlify deploy --prod",
+    "deploy": "netlify deploy",
+    "init": "netlify init"
   },
   "keywords": [],
   "author": "",
