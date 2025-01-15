@@ -26,10 +26,12 @@ if (!fs.existsSync(tempOutputDir)) {
 }
 
 
-const upload = multer({ dest: tempUploadsDir,
+const upload = multer({ 
+    dest: tempUploadsDir,
     limits: {
       fileSize: 200 * 1024 * 1024, // 50MB file size limit
-    } });
+    }
+});
 
 
 const processFolder = (zip, outputDir, folder) => {
@@ -139,6 +141,11 @@ router.post('/upload-pst', upload.single('pstFile'), (req, res) => {
     } catch (err) {
         console.error('Error processing PST file:', err);
         res.status(500).send('Error processing PST file.');
+    }
+    finally {
+        // Cleanup
+        if (fs.existsSync(pstFilePath)) fs.unlinkSync(pstFilePath);
+        if (fs.existsSync(zipFilePath)) fs.unlinkSync(zipFilePath);
     }
 });
 
