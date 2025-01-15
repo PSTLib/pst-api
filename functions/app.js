@@ -14,18 +14,23 @@ app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ limit: '200mb', extended: true }));
 const router = express.Router();
 
-const upload = multer({ dest: 'uploads/',
+const tempUploadsDir = '/tmp/uploads';
+const tempOutputDir = '/tmp/output';
+
+// Ensure temporary directories exist
+if (!fs.existsSync(tempUploadsDir)) {
+    fs.mkdirSync(tempUploadsDir, { recursive: true });
+}
+if (!fs.existsSync(tempOutputDir)) {
+    fs.mkdirSync(tempOutputDir, { recursive: true });
+}
+
+
+const upload = multer({ dest: tempUploadsDir,
     limits: {
       fileSize: 200 * 1024 * 1024, // 50MB file size limit
     } });
 
-// Ensure uploads and output directories exist
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
-if (!fs.existsSync('output')) {
-    fs.mkdirSync('output');
-}
 
 const processFolder = (zip, outputDir, folder) => {
     let email;
@@ -44,13 +49,12 @@ const processFolder = (zip, outputDir, folder) => {
         let body = '';
         if(email.body){
             body = email.body
-        }
-        else if(email.bodyRTF){
+        } else if(email.bodyRTF){
             body = email.bodyRTF
-        }
-        else if(email.bodyHTML){
+        } else if(email.bodyHTML){
             body = email.bodyHTML;
         }
+
         const emailContent = `Subject: ${email.subject}\nFrom: ${email.senderName}\nTo: ${email.displayTo}\nBody: ${body}\n`;
 
         const emailFileName = `email_${email.descriptorNodeId}.txt`;
@@ -109,9 +113,9 @@ router.post('/upload-pst', upload.single('pstFile'), (req, res) => {
     }
 
     const pstFilePath = req.file.path;
-    const outputDir = path.join(__dirname, 'output');
+    const outputDir = path.join(tempOutputDir);
     const zipFileName = `${uuidv4()}.zip`; // Generate a random UUID for the ZIP file
-    const zipFilePath = path.join(__dirname, zipFileName);
+    const zipFilePath = path.join('/tmp', zipFileName);
 
     try {
         // Extract PST file
