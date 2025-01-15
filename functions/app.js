@@ -95,6 +95,10 @@ const processFolder = (zip, outputDir, folder) => {
 };
 
 
+router.get("/health", (req, res) => {
+    res.send("App is running..");
+});
+
 router.get("/", (req, res) => {
     res.send("App is running..");
 });
@@ -134,5 +138,7 @@ router.post('/upload-pst', upload.single('pstFile'), (req, res) => {
     }
 });
 
-app.use("/", router);
+app.use('/.netlify/functions/server', router);
+
+module.exports = app;
 module.exports.handler = serverless(app);
