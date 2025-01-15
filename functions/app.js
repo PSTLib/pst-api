@@ -134,5 +134,5 @@ router.post('/upload-pst', upload.single('pstFile'), (req, res) => {
     }
 });
 
-app.use("/.netlify/functions/app", router);
+app.use("/", router);
 module.exports.handler = serverless(app);
